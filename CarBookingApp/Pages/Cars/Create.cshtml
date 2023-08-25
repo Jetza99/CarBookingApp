@@ -1,0 +1,39 @@
+﻿@page
+@model CarBookingApp.Pages.Cars.CreateModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create Car</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="form-floating mb-3">
+                <input asp-for="Car.Name" type="text" class="form-control" id="floatingInputValue" placeholder="e.g Suzuki Swift Sport">
+                <label for="floatingInputValue">Car Name</label>
+                <span asp-validation-for="Car.Name" class="text-danger"></span>
+            </div>
+            <div class="form-floating mb-3">
+                <input asp-for="Car.Year" class="form-control" id="floatingInputValue" placeholder="e.g 2013">
+                <label for="floatingInputValue">Model Year</label>
+                <span asp-validation-for="Car.Year" class="text-danger"></span>
+            </div>
+            
+            <div class="d-grid gap-2">
+                <button class="btn btn-primary" type="submit">Create</button>
+                <a asp-page="./Index" class="btn btn-outline-secondary"><i class="fa fa-arrow-left"></i> Back to List</a>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

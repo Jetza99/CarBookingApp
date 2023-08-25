@@ -1,0 +1,36 @@
+﻿@page
+@model CarBookingApp.Pages.Cars.DetailsModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Car</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Car.Year)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Car.Year)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Car.Name)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Car.Name)
+        </dd>
+    </dl>
+    
+</div>
+<div class="d-grid gap-2">
+    <a class="btn btn-warning" asp-page="./Edit" asp-route-id="@Model.Car?.Id">
+        Edit
+        <i class="fa fa-edit" area-hidden="true"></i>
+    </a>
+    <a asp-page="./Index" class="btn btn-outline-secondary"><i class="fa fa-arrow-left"></i> Back to List</a>
+</div>
+
