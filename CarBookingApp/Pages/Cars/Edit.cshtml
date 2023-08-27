@@ -10,17 +10,37 @@
 <div class="row">
     <div class="col-md-4">
         <form method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div asp-validation-summary="All" class="text-danger"></div>
             <input type="hidden" asp-for="Car.Id" />
-            <div class="form-floating mb-3">
-                <input asp-for="Car.Name" type="text" class="form-control" id="floatingInputValue" placeholder="e.g Suzuki Swift Sport">
-                <label for="floatingInputValue">Car Name</label>
-                <span asp-validation-for="Car.Name" class="text-danger"></span>
+            <div class="d-grid gap-2">
+                <label asp-for="Car.MakeId">Car Make</label>
+                <select id="makes" asp-for="Car.MakeId" asp-items="@Model.Makes">
+                    <option>Select Make</option>
+                </select>
+                <span asp-validation-for="Car.MakeId" class="text-danger"></span>
+            </div>
+            <div class="d-grid gap-2">
+                <label asp-for="Car.CarModelId">Car Make</label>
+                <select id="models" asp-for="Car.CarModelId">
+                </select>
+                <span asp-validation-for="Car.CarModelId" class="text-danger"></span>
+            </div>
+            <div class="d-grid gap-2">
+                <label asp-for="Car.ColorId">Car Color</label>
+                <select asp-for="Car.ColorId" asp-items="@Model.Colors">
+                    <option>Select Color</option>
+                </select>
+                <span asp-validation-for="Car.ColorId" class="text-danger"></span>
             </div>
             <div class="form-floating mb-3">
                 <input asp-for="Car.Year" class="form-control" id="floatingInputValue" placeholder="e.g 2013">
                 <label for="floatingInputValue">Model Year</label>
                 <span asp-validation-for="Car.Year" class="text-danger"></span>
+            </div>
+            <div class="form-floating mb-3">
+                <input asp-for="Car.LicensePlate" class="form-control" id="floatingInputValue" placeholder="e.g TMH2589">
+                <label for="floatingInputValue">License Plate</label>
+                <span asp-validation-for="Car.LicensePlate" class="text-danger"></span>
             </div>
             <div class="d-grid gap-2">
                 <button class="btn btn-success" type="submit"><i class="fa fa-floppy-disk"></i> Save</button>
@@ -34,4 +54,5 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/CascadingModelsDropdownList.js"></script>
 }

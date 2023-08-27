@@ -4,6 +4,7 @@ using CarBookingAppData;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CarBookingAppData.Migrations
 {
     [DbContext(typeof(CarBookingAppDbContext))]
-    partial class CarBookingAppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230826193952_AddedMoreCarDataTables")]
+    partial class AddedMoreCarDataTables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -38,11 +41,6 @@ namespace CarBookingAppData.Migrations
 
                     b.Property<DateTime>("DateCreated")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("LicensePlate")
-                        .IsRequired()
-                        .HasMaxLength(10)
-                        .HasColumnType("nvarchar(10)");
 
                     b.Property<int?>("MakeId")
                         .HasColumnType("int");
@@ -72,17 +70,12 @@ namespace CarBookingAppData.Migrations
                     b.Property<DateTime>("DateCreated")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("MakeId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("MakeId");
-
-                    b.ToTable("CarModels");
+                    b.ToTable("CarModel");
                 });
 
             modelBuilder.Entity("CarBookingAppData.Color", b =>
@@ -101,7 +94,7 @@ namespace CarBookingAppData.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Colors");
+                    b.ToTable("Color");
                 });
 
             modelBuilder.Entity("CarBookingAppData.Make", b =>
@@ -146,15 +139,6 @@ namespace CarBookingAppData.Migrations
 
             modelBuilder.Entity("CarBookingAppData.CarModel", b =>
                 {
-                    b.HasOne("CarBookingAppData.Make", "Make")
-                        .WithMany("CarModels")
-                        .HasForeignKey("MakeId");
-
-                    b.Navigation("Make");
-                });
-
-            modelBuilder.Entity("CarBookingAppData.CarModel", b =>
-                {
                     b.Navigation("Cars");
                 });
 
@@ -165,8 +149,6 @@ namespace CarBookingAppData.Migrations
 
             modelBuilder.Entity("CarBookingAppData.Make", b =>
                 {
-                    b.Navigation("CarModels");
-
                     b.Navigation("Cars");
                 });
 #pragma warning restore 612, 618

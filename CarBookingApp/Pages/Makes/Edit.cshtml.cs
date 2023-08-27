@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CarBookingAppData;
 
-namespace CarBookingApp.Pages.Cars
+namespace CarBookingApp.Pages.Makes
 {
     public class EditModel : PageModel
     {
@@ -20,25 +20,21 @@ namespace CarBookingApp.Pages.Cars
         }
 
         [BindProperty]
-        public Car Car { get; set; } = default!;
-        public SelectList? Makes { get; set; }
-        public SelectList? Models { get; private set; }
-        public SelectList? Colors { get; private set; }
+        public Make Make { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
-            if (id == null || _context.Cars == null)
+            if (id == null || _context.Makes == null)
             {
                 return NotFound();
             }
 
-            var car =  await _context.Cars.FirstOrDefaultAsync(m => m.Id == id);
-            if (car == null)
+            var make =  await _context.Makes.FirstOrDefaultAsync(m => m.Id == id);
+            if (make == null)
             {
                 return NotFound();
             }
-            Car = car;
-            await LoadInitialData();
+            Make = make;
             return Page();
         }
 
@@ -48,11 +44,10 @@ namespace CarBookingApp.Pages.Cars
         {
             if (!ModelState.IsValid)
             {
-                await LoadInitialData();
                 return Page();
             }
 
-            _context.Attach(Car).State = EntityState.Modified;
+            _context.Attach(Make).State = EntityState.Modified;
 
             try
             {
@@ -60,7 +55,7 @@ namespace CarBookingApp.Pages.Cars
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!CarExists(Car.Id))
+                if (!MakeExists(Make.Id))
                 {
                     return NotFound();
                 }
@@ -72,15 +67,10 @@ namespace CarBookingApp.Pages.Cars
 
             return RedirectToPage("./Index");
         }
-        private async Task LoadInitialData()
-        {
-            Makes = new SelectList(await _context.Makes.ToListAsync(), "Id", "Name");
-            Colors = new SelectList(await _context.Colors.ToListAsync(), "Id", "Name");
-        }
 
-        private bool CarExists(int id)
+        private bool MakeExists(int id)
         {
-          return (_context.Cars?.Any(e => e.Id == id)).GetValueOrDefault();
+          return (_context.Makes?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

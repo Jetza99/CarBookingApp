@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using CarBookingAppData;
 
-namespace CarBookingApp.Pages.Cars
+namespace CarBookingApp.Pages.Colors
 {
     public class DeleteModel : PageModel
     {
@@ -19,40 +19,40 @@ namespace CarBookingApp.Pages.Cars
         }
 
         [BindProperty]
-      public Car Car { get; set; } = default!;
+      public Color Color { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
-            if (id == null || _context.Cars == null)
+            if (id == null || _context.Colors == null)
             {
                 return NotFound();
             }
 
-            var car = await _context.Cars.FirstOrDefaultAsync(m => m.Id == id);
+            var color = await _context.Colors.FirstOrDefaultAsync(m => m.Id == id);
 
-            if (car == null)
+            if (color == null)
             {
                 return NotFound();
             }
             else 
             {
-                Car = car;
+                Color = color;
             }
             return Page();
         }
 
         public async Task<IActionResult> OnPostAsync(int? id)
         {
-            if (id == null || _context.Cars == null)
+            if (id == null || _context.Colors == null)
             {
                 return NotFound();
             }
-            var car = await _context.Cars.FindAsync(id);
+            var color = await _context.Colors.FindAsync(id);
 
-            if (car != null)
+            if (color != null)
             {
-                Car = car;
-                _context.Cars.Remove(Car);
+                Color = color;
+                _context.Colors.Remove(Color);
                 await _context.SaveChangesAsync();
             }
 

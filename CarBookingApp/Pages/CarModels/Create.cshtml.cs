@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using CarBookingAppData;
 using Microsoft.EntityFrameworkCore;
 
-namespace CarBookingApp.Pages.Cars
+namespace CarBookingApp.Pages.CarModels
 {
     public class CreateModel : PageModel
     {
@@ -18,11 +18,6 @@ namespace CarBookingApp.Pages.Cars
         {
             _context = context;
         }
-        [BindProperty]
-        public Car Car { get; set; } = default!;
-        public SelectList Makes { get; set; } = default!;
-        public SelectList Models { get; set; } = default!;
-        public SelectList Colors { get; set; } = default!;
 
         public async Task<IActionResult> OnGet()
         {
@@ -30,38 +25,28 @@ namespace CarBookingApp.Pages.Cars
             return Page();
         }
 
-        
+        [BindProperty]
+        public CarModel CarModel { get; set; } = default!;
+        public SelectList? Makes { get; private set; }
+
 
         // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
         public async Task<IActionResult> OnPostAsync()
         {
-          if (!ModelState.IsValid || _context.Cars == null || Car == null)
+          if (!ModelState.IsValid || _context.CarModels == null || CarModel == null)
             {
                 await LoadInitialData();
                 return Page();
             }
 
-            _context.Cars.Add(Car);
+            _context.CarModels.Add(CarModel);
             await _context.SaveChangesAsync();
 
             return RedirectToPage("./Index");
         }
-
-        public async Task<JsonResult> OnGetCarModels(int makeid)
-        {
-            var models = await _context.CarModels
-                .Where(q => q.MakeId == makeid)
-                .ToListAsync();
-
-            return new JsonResult(models);
-        }
-
         private async Task LoadInitialData()
         {
             Makes = new SelectList(await _context.Makes.ToListAsync(), "Id", "Name");
-            Colors = new SelectList(await _context.Colors.ToListAsync(), "Id", "Name");
         }
     }
-
-
 }

@@ -18,15 +18,27 @@
             @Html.DisplayFor(model => model.Car.Year)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Car.Name)
+            @Html.DisplayNameFor(model => model.Car.Make.Name)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Car.Name)
+            @Html.DisplayFor(model => model.Car.Make.Name)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Car.CarModel.Name)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Car.CarModel.Name)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Car.Color.Name)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Car.Color.Name)
         </dd>
     </dl>
     
 </div>
-<div class="d-grid gap-2">
+<div class="gap-2">
     <a class="btn btn-warning" asp-page="./Edit" asp-route-id="@Model.Car?.Id">
         Edit
         <i class="fa fa-edit" area-hidden="true"></i>

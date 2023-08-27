@@ -24,7 +24,11 @@ namespace CarBookingApp.Pages.Cars
         {
             if (_context.Cars != null)
             {
-                Cars = await _context.Cars.ToListAsync();
+                Cars = await _context.Cars
+                    .Include(q => q.Make)
+                    .Include(q => q.CarModel)
+                    .Include(q => q.Color)
+                    .ToListAsync();
             }
         }
 
