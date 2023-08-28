@@ -27,5 +27,22 @@ namespace CarBookingApp.Pages.Colors
                 Color = await _context.Colors.ToListAsync();
             }
         }
+        public async Task<IActionResult> OnPostDelete(int? recordid)
+        {
+            if (recordid == null || _context.Colors == null)
+            {
+                return NotFound();
+            }
+            var color = await _context.Colors.FindAsync(recordid);
+
+            if (color != null)
+            {
+                _context.Colors.Remove(color);
+                await _context.SaveChangesAsync();
+            }
+
+            return RedirectToPage();
+        }
+
     }
 }

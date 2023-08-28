@@ -38,11 +38,6 @@
     </dl>
     
 </div>
-<div class="gap-2">
-    <a class="btn btn-warning" asp-page="./Edit" asp-route-id="@Model.Car?.Id">
-        Edit
-        <i class="fa fa-edit" area-hidden="true"></i>
-    </a>
-    <a asp-page="./Index" class="btn btn-outline-secondary"><i class="fa fa-arrow-left"></i> Back to List</a>
-</div>
+
+@await Html.PartialAsync("_IndexDetailsButtonsPartial", Model.Car.Id)
 

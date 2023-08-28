@@ -27,13 +27,13 @@ namespace CarBookingApp.Pages.CarModels
                 CarModel = await _context.CarModels.ToListAsync();
             }
         }
-        public async Task<IActionResult> OnPostDelete(int? modelid)
+        public async Task<IActionResult> OnPostDelete(int? recordid)
         {
-            if (modelid == null || _context.Makes == null)
+            if (recordid == null || _context.Makes == null)
             {
                 return NotFound();
             }
-            var model = await _context.CarModels.FindAsync(modelid);
+            var model = await _context.CarModels.FindAsync(recordid);
 
             if (model != null)
             {

@@ -27,13 +27,13 @@ namespace CarBookingApp.Pages.Makes
                 Make = await _context.Makes.ToListAsync();
             }
         }
-        public async Task<IActionResult> OnPostDelete(int? makeid)
+        public async Task<IActionResult> OnPostDelete(int? recordid)
         {
-            if (makeid == null || _context.Makes == null)
+            if (recordid == null || _context.Makes == null)
             {
                 return NotFound();
             }
-            var make = await _context.Makes.FindAsync(makeid);
+            var make = await _context.Makes.FindAsync(recordid);
 
             if (make != null)
             {

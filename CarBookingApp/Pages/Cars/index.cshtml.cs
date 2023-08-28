@@ -32,13 +32,13 @@ namespace CarBookingApp.Pages.Cars
             }
         }
 
-        public async Task<IActionResult> OnPostDelete(int? carid)
+        public async Task<IActionResult> OnPostDelete(int? recordid)
         {
-            if (carid == null || _context.Cars == null)
+            if (recordid == null || _context.Cars == null)
             {
                 return NotFound();
             }
-            var car = await _context.Cars.FindAsync(carid);
+            var car = await _context.Cars.FindAsync(recordid);
 
             if (car != null)
             {

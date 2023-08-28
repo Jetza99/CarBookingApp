@@ -42,11 +42,8 @@
                 <label for="floatingInputValue">License Plate</label>
                 <span asp-validation-for="Car.LicensePlate" class="text-danger"></span>
             </div>
-            
-            <div class="d-grid gap-2">
-                <button class="btn btn-primary" type="submit">Create</button>
-                <a asp-page="./Index" class="btn btn-outline-secondary"><i class="fa fa-arrow-left"></i> Back to List</a>
-            </div>
+
+            <partial name="_CreateButtonsPartial" />
 
         </form>
     </div>
@@ -56,5 +53,5 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-    <script src="~/js/CascadingModelsDropdownList.js"></script>
+    <script src="~/js/CascadingModelsDropdownList.js" modelId="0"></script>
 }

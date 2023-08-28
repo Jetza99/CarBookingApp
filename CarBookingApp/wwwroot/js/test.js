@@ -1,5 +1,5 @@
-﻿
-var makeId = $('#makes').val();
+﻿var makeId = $('#makes').val();
+var modelId = document.currentScript.getAttribute('modelId');
 LoadModels();
 
 $('#makes').change(function () {
@@ -9,9 +9,13 @@ $('#makes').change(function () {
 });
 
 function LoadModels() {
+
     $.getJSON('/Cars/Create?handler=CarModels', { makeId: makeId }, function (data) {
         $.each(data, function (key, value) {
             var option = $('<option></option>').attr('value', value.id).text(value.name);
+            if (value.id == modelId) {
+                option.prop('selected', true);
+            }
             $('#models').append(option);
         });
     });

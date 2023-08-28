@@ -20,8 +20,9 @@
                 <span asp-validation-for="Car.MakeId" class="text-danger"></span>
             </div>
             <div class="d-grid gap-2">
-                <label asp-for="Car.CarModelId">Car Make</label>
-                <select id="models" asp-for="Car.CarModelId">
+                <label asp-for="Car.CarModelId">Car Model</label>
+                <select id="models" class="form-control" asp-for="Car.CarModelId">
+                    <option>Select Model</option>
                 </select>
                 <span asp-validation-for="Car.CarModelId" class="text-danger"></span>
             </div>
@@ -42,10 +43,8 @@
                 <label for="floatingInputValue">License Plate</label>
                 <span asp-validation-for="Car.LicensePlate" class="text-danger"></span>
             </div>
-            <div class="d-grid gap-2">
-                <button class="btn btn-success" type="submit"><i class="fa fa-floppy-disk"></i> Save</button>
-                <a asp-page="./Index" class="btn btn-outline-secondary"><i class="fa fa-arrow-left"></i> Back to List</a>
-            </div>
+            <Partial name="_IndexEditButtonsPartial" />
+
         </form>
     </div>
 </div>
@@ -54,5 +53,8 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-    <script src="~/js/CascadingModelsDropdownList.js"></script>
+
+    <script src="~/js/test.js" modelId="@Model.Car.CarModelId"></script>
+
+
 }
