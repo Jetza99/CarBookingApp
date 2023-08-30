@@ -6,40 +6,34 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using CarBookingAppData;
+using CarBookingAppRepositories.Contracts;
 
 namespace CarBookingApp.Pages.Makes
 {
     public class IndexModel : PageModel
     {
-        private readonly CarBookingAppData.CarBookingAppDbContext _context;
-
-        public IndexModel(CarBookingAppData.CarBookingAppDbContext context)
+        private readonly IGenericRepository<Make> _repository;
+        public IndexModel(IGenericRepository<Make> _repository)
         {
-            _context = context;
+            this._repository = _repository;
         }
 
-        public IList<Make> Make { get;set; } = default!;
+        public IList<Make> Makes { get;set; } = default!;
 
         public async Task OnGetAsync()
         {
-            if (_context.Makes != null)
-            {
-                Make = await _context.Makes.ToListAsync();
-            }
+            Makes = await _repository.GetAll();
+            
         }
         public async Task<IActionResult> OnPostDelete(int? recordid)
         {
-            if (recordid == null || _context.Makes == null)
+            if (recordid == null)
             {
                 return NotFound();
             }
-            var make = await _context.Makes.FindAsync(recordid);
-
-            if (make != null)
-            {
-                _context.Makes.Remove(make);
-                await _context.SaveChangesAsync();
-            }
+            
+            await _repository.Delete(recordid.Value);
+            
 
             return RedirectToPage();
         }

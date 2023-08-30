@@ -7,16 +7,17 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CarBookingAppData;
+using CarBookingAppRepositories.Contracts;
 
 namespace CarBookingApp.Pages.Makes
 {
     public class EditModel : PageModel
     {
-        private readonly CarBookingAppData.CarBookingAppDbContext _context;
 
-        public EditModel(CarBookingAppData.CarBookingAppDbContext context)
+        private readonly IGenericRepository<Make> _repository;
+        public EditModel(IGenericRepository<Make> _repository)
         {
-            _context = context;
+            this._repository = _repository;
         }
 
         [BindProperty]
@@ -24,12 +25,12 @@ namespace CarBookingApp.Pages.Makes
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
-            if (id == null || _context.Makes == null)
+            if (id == null)
             {
                 return NotFound();
             }
 
-            var make =  await _context.Makes.FirstOrDefaultAsync(m => m.Id == id);
+            var make = await _repository.Get(id.Value);
             if (make == null)
             {
                 return NotFound();
@@ -46,16 +47,13 @@ namespace CarBookingApp.Pages.Makes
             {
                 return Page();
             }
-
-            _context.Attach(Make).State = EntityState.Modified;
-
             try
             {
-                await _context.SaveChangesAsync();
+                await _repository.Update(Make);
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!MakeExists(Make.Id))
+                if (! await MakeExistsAsync(Make.Id))
                 {
                     return NotFound();
                 }
@@ -68,9 +66,9 @@ namespace CarBookingApp.Pages.Makes
             return RedirectToPage("./Index");
         }
 
-        private bool MakeExists(int id)
+        private async Task<bool> MakeExistsAsync(int id)
         {
-          return (_context.Makes?.Any(e => e.Id == id)).GetValueOrDefault();
+          return await _repository.Exists(id);
         }
     }
 }

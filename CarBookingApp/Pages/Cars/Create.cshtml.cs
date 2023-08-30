@@ -7,16 +7,26 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using CarBookingAppData;
 using Microsoft.EntityFrameworkCore;
+using CarBookingAppRepositories.Contracts;
 
 namespace CarBookingApp.Pages.Cars
 {
     public class CreateModel : PageModel
     {
-        private readonly CarBookingAppData.CarBookingAppDbContext _context;
 
-        public CreateModel(CarBookingAppData.CarBookingAppDbContext context)
+        private readonly IGenericRepository<Car> _carRepository;
+        private readonly IGenericRepository<Make> _makeRepository;
+        private readonly ICarModelRepository _carModelRepository;
+        private readonly IGenericRepository<Color> _colorRepository;
+        public CreateModel(IGenericRepository<Car> _carRepository,
+                           IGenericRepository<Make> _makeRepository,
+                           ICarModelRepository _carModelRepository,
+                           IGenericRepository<Color> _colorRepository)
         {
-            _context = context;
+            this._carRepository = _carRepository;
+            this._makeRepository = _makeRepository;
+            this._carModelRepository = _carModelRepository;
+            this._colorRepository = _colorRepository;
         }
         [BindProperty]
         public Car Car { get; set; } = default!;
@@ -35,31 +45,27 @@ namespace CarBookingApp.Pages.Cars
         // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
         public async Task<IActionResult> OnPostAsync()
         {
-          if (!ModelState.IsValid || _context.Cars == null || Car == null)
+          if (!ModelState.IsValid)
             {
                 await LoadInitialData();
                 return Page();
             }
 
-            _context.Cars.Add(Car);
-            await _context.SaveChangesAsync();
+            await _carRepository.Insert(Car);
 
             return RedirectToPage("./Index");
         }
 
         public async Task<JsonResult> OnGetCarModels(int makeid)
         {
-            var models = await _context.CarModels
-                .Where(q => q.MakeId == makeid)
-                .ToListAsync();
-
-            return new JsonResult(models);
+            return new JsonResult(await _carModelRepository.GetCarModelsByMake(makeid));
         }
 
         private async Task LoadInitialData()
         {
-            Makes = new SelectList(await _context.Makes.ToListAsync(), "Id", "Name");
-            Colors = new SelectList(await _context.Colors.ToListAsync(), "Id", "Name");
+            Makes = new SelectList(await _makeRepository.GetAll(), "Id", "Name");
+            Models = new SelectList(await _carModelRepository.GetAll(), "Id", "Name");
+            Colors = new SelectList(await _colorRepository.GetAll(), "Id", "Name");
         }
     }
 

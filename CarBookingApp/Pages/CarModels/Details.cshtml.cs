@@ -6,35 +6,32 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using CarBookingAppData;
+using CarBookingAppRepositories.Contracts;
 
 namespace CarBookingApp.Pages.CarModels
 {
     public class DetailsModel : PageModel
-    {
-        private readonly CarBookingAppData.CarBookingAppDbContext _context;
-
-        public DetailsModel(CarBookingAppData.CarBookingAppDbContext context)
+    { 
+        private readonly ICarModelRepository _repository;
+        public DetailsModel(ICarModelRepository _repository)
         {
-            _context = context;
+            this._repository = _repository;
         }
 
-      public CarModel CarModel { get; set; } = default!; 
+        public CarModel CarModel { get; set; } = default!; 
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
-            if (id == null || _context.CarModels == null)
+            if (id == null)
             {
                 return NotFound();
             }
 
-            var carmodel = await _context.CarModels.FirstOrDefaultAsync(m => m.Id == id);
-            if (carmodel == null)
+            CarModel = await _repository.GetCarModelWithDetails(id.Value);
+
+            if (CarModel == null)
             {
                 return NotFound();
-            }
-            else 
-            {
-                CarModel = carmodel;
             }
             return Page();
         }

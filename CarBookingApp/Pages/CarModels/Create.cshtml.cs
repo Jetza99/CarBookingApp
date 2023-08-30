@@ -7,16 +7,21 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using CarBookingAppData;
 using Microsoft.EntityFrameworkCore;
+using CarBookingAppRepositories.Contracts;
+using CarBookingAppRepositories.Repositories;
 
 namespace CarBookingApp.Pages.CarModels
 {
     public class CreateModel : PageModel
     {
-        private readonly CarBookingAppData.CarBookingAppDbContext _context;
+        private readonly IGenericRepository<CarModel> _carModelRepository;
+        private readonly IGenericRepository<Make> _makesRepository;
 
-        public CreateModel(CarBookingAppData.CarBookingAppDbContext context)
+        public CreateModel(IGenericRepository<CarModel> _carModelRepository, IGenericRepository<Make> _makesRepository)
         {
-            _context = context;
+            this._carModelRepository = _carModelRepository;
+            this._makesRepository = _makesRepository;
+
         }
 
         public async Task<IActionResult> OnGet()
@@ -33,20 +38,19 @@ namespace CarBookingApp.Pages.CarModels
         // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
         public async Task<IActionResult> OnPostAsync()
         {
-          if (!ModelState.IsValid || _context.CarModels == null || CarModel == null)
+          if (!ModelState.IsValid)
             {
                 await LoadInitialData();
                 return Page();
             }
 
-            _context.CarModels.Add(CarModel);
-            await _context.SaveChangesAsync();
+            await _carModelRepository.Insert(CarModel);
 
             return RedirectToPage("./Index");
         }
         private async Task LoadInitialData()
         {
-            Makes = new SelectList(await _context.Makes.ToListAsync(), "Id", "Name");
+            Makes = new SelectList(await _makesRepository.GetAll(), "Id", "Name");
         }
     }
 }

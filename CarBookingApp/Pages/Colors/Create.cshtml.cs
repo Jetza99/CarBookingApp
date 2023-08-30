@@ -6,16 +6,16 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using CarBookingAppData;
+using CarBookingAppRepositories.Contracts;
 
 namespace CarBookingApp.Pages.Colors
 {
     public class CreateModel : PageModel
     {
-        private readonly CarBookingAppData.CarBookingAppDbContext _context;
-
-        public CreateModel(CarBookingAppData.CarBookingAppDbContext context)
+        private readonly IGenericRepository<Color> _repository;
+        public CreateModel(IGenericRepository<Color> _repository)
         {
-            _context = context;
+            this._repository = _repository;
         }
 
         public IActionResult OnGet()
@@ -30,13 +30,12 @@ namespace CarBookingApp.Pages.Colors
         // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
         public async Task<IActionResult> OnPostAsync()
         {
-          if (!ModelState.IsValid || _context.Colors == null || Color == null)
+          if (!ModelState.IsValid)
             {
                 return Page();
             }
 
-            _context.Colors.Add(Color);
-            await _context.SaveChangesAsync();
+            await _repository.Insert(Color);
 
             return RedirectToPage("./Index");
         }

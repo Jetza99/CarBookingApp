@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CarBookingAppData;
+using CarBookingAppRepositories.Contracts;
 
 namespace CarBookingApp.Pages.Colors
 {
@@ -14,9 +15,10 @@ namespace CarBookingApp.Pages.Colors
     {
         private readonly CarBookingAppData.CarBookingAppDbContext _context;
 
-        public EditModel(CarBookingAppData.CarBookingAppDbContext context)
+        private readonly IGenericRepository<Color> _repository;
+        public EditModel(IGenericRepository<Color> _repository)
         {
-            _context = context;
+            this._repository = _repository;
         }
 
         [BindProperty]
@@ -46,16 +48,13 @@ namespace CarBookingApp.Pages.Colors
             {
                 return Page();
             }
-
-            _context.Attach(Color).State = EntityState.Modified;
-
             try
             {
-                await _context.SaveChangesAsync();
+                await _repository.Update(Color);
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!ColorExists(Color.Id))
+                if (! await ColorExistsAsync(Color.Id))
                 {
                     return NotFound();
                 }
@@ -68,9 +67,9 @@ namespace CarBookingApp.Pages.Colors
             return RedirectToPage("./Index");
         }
 
-        private bool ColorExists(int id)
+        private async Task<bool> ColorExistsAsync(int id)
         {
-          return (_context.Colors?.Any(e => e.Id == id)).GetValueOrDefault();
+            return await _repository.Exists(id);
         }
     }
 }

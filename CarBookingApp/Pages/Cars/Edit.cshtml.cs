@@ -7,16 +7,26 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CarBookingAppData;
+using CarBookingAppRepositories.Contracts;
 
 namespace CarBookingApp.Pages.Cars
 {
     public class EditModel : PageModel
     {
-        private readonly CarBookingAppData.CarBookingAppDbContext _context;
 
-        public EditModel(CarBookingAppData.CarBookingAppDbContext context)
+        private readonly IGenericRepository<Car> _carRepository;
+        private readonly IGenericRepository<Make> _makeRepository;
+        private readonly ICarModelRepository _carModelRepository;
+        private readonly IGenericRepository<Color> _colorRepository;
+        public EditModel(IGenericRepository<Car> _carRepository,
+                           IGenericRepository<Make> _makeRepository,
+                           ICarModelRepository _carModelRepository,
+                           IGenericRepository<Color> _colorRepository)
         {
-            _context = context;
+            this._carRepository = _carRepository;
+            this._makeRepository = _makeRepository;
+            this._carModelRepository = _carModelRepository;
+            this._colorRepository = _colorRepository;
         }
 
         [BindProperty]
@@ -27,17 +37,19 @@ namespace CarBookingApp.Pages.Cars
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
-            if (id == null || _context.Cars == null)
+            if (id == null)
             {
                 return NotFound();
             }
 
-            var car =  await _context.Cars.FirstOrDefaultAsync(m => m.Id == id);
+            var car = await _carRepository.Get(id.Value);
+
             if (car == null)
             {
                 return NotFound();
             }
-            Car = car;
+         
+
             await LoadInitialData();
             return Page();
         }
@@ -51,16 +63,13 @@ namespace CarBookingApp.Pages.Cars
                 await LoadInitialData();
                 return Page();
             }
-
-            _context.Attach(Car).State = EntityState.Modified;
-
             try
             {
-                await _context.SaveChangesAsync();
+                await _carRepository.Update(Car);
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!CarExists(Car.Id))
+                if (! await CarExistsAsync(Car.Id))
                 {
                     return NotFound();
                 }
@@ -74,13 +83,14 @@ namespace CarBookingApp.Pages.Cars
         }
         private async Task LoadInitialData()
         {
-            Makes = new SelectList(await _context.Makes.ToListAsync(), "Id", "Name");
-            Colors = new SelectList(await _context.Colors.ToListAsync(), "Id", "Name");
+            Makes = new SelectList(await _makeRepository.GetAll(), "Id", "Name");
+            Models = new SelectList(await _carModelRepository.GetAll(), "Id", "Name");
+            Colors = new SelectList(await _colorRepository.GetAll(), "Id", "Name");
         }
 
-        private bool CarExists(int id)
+        private async Task<bool> CarExistsAsync(int id)
         {
-          return (_context.Cars?.Any(e => e.Id == id)).GetValueOrDefault();
+            return await _carRepository.Exists(id);
         }
     }
 }

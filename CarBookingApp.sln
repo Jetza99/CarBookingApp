@@ -5,7 +5,14 @@ VisualStudioVersion = 17.7.34003.232
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CarBookingApp", "CarBookingApp\CarBookingApp.csproj", "{F55C4663-3B90-4BD4-8A4B-C6D593BA76B5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarBookingAppData", "CarBookingAppData\CarBookingAppData.csproj", "{ADCB22AF-E55B-4F3C-9A3E-F9E388C41A26}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CarBookingAppData", "CarBookingAppData\CarBookingAppData.csproj", "{ADCB22AF-E55B-4F3C-9A3E-F9E388C41A26}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CarBookingAppRepositories", "CarBookingAppRepositories\CarBookingAppRepositories.csproj", "{DA7B1BC1-7DBB-4A64-8CA1-F18E40EC597E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{6079E615-496A-4AFF-AE5A-F8969B7A5C27}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +28,10 @@ Global
 		{ADCB22AF-E55B-4F3C-9A3E-F9E388C41A26}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ADCB22AF-E55B-4F3C-9A3E-F9E388C41A26}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ADCB22AF-E55B-4F3C-9A3E-F9E388C41A26}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DA7B1BC1-7DBB-4A64-8CA1-F18E40EC597E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DA7B1BC1-7DBB-4A64-8CA1-F18E40EC597E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DA7B1BC1-7DBB-4A64-8CA1-F18E40EC597E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DA7B1BC1-7DBB-4A64-8CA1-F18E40EC597E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -6,28 +6,28 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using CarBookingAppData;
+using CarBookingAppRepositories.Contracts;
 
 namespace CarBookingApp.Pages.Colors
 {
     public class DetailsModel : PageModel
     {
-        private readonly CarBookingAppData.CarBookingAppDbContext _context;
-
-        public DetailsModel(CarBookingAppData.CarBookingAppDbContext context)
+        private readonly IGenericRepository<Color> _repository;
+        public DetailsModel(IGenericRepository<Color> _repository)
         {
-            _context = context;
+            this._repository = _repository;
         }
 
-      public Color Color { get; set; } = default!; 
+        public Color Color { get; set; } = default!; 
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
-            if (id == null || _context.Colors == null)
+            if (id == null)
             {
                 return NotFound();
             }
 
-            var color = await _context.Colors.FirstOrDefaultAsync(m => m.Id == id);
+            var color = await _repository.Get(id.Value);
             if (color == null)
             {
                 return NotFound();

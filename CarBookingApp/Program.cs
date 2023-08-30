@@ -1,4 +1,6 @@
 using CarBookingAppData;
+using CarBookingAppRepositories.Contracts;
+using CarBookingAppRepositories.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 
@@ -8,6 +10,11 @@ var builder = WebApplication.CreateBuilder(args);
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<CarBookingAppDbContext>(options => options.UseSqlServer(connectionString));
+
+builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+builder.Services.AddScoped<ICarModelRepository, CarModelRepository>();
+builder.Services.AddScoped<ICarRepository, CarRepository>();
+
 
 builder.Services.AddRazorPages();
 var app = builder.Build();
