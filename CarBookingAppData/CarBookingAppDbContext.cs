@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using CarBookingAppData.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using System;
 using System.Collections.Generic;
@@ -8,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace CarBookingAppData
 {
-    public class CarBookingAppDbContext : DbContext
+    public class CarBookingAppDbContext : IdentityDbContext<ApplicationUser>
     {
        
         public CarBookingAppDbContext(DbContextOptions<CarBookingAppDbContext> options) 

@@ -13,7 +13,6 @@ namespace CarBookingApp.Pages.Colors
 {
     public class EditModel : PageModel
     {
-        private readonly CarBookingAppData.CarBookingAppDbContext _context;
 
         private readonly IGenericRepository<Color> _repository;
         public EditModel(IGenericRepository<Color> _repository)
@@ -26,12 +25,13 @@ namespace CarBookingApp.Pages.Colors
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
-            if (id == null || _context.Colors == null)
+            if (id == null)
             {
                 return NotFound();
             }
 
-            var color =  await _context.Colors.FirstOrDefaultAsync(m => m.Id == id);
+            var color = await _repository.Get(id.Value);
+
             if (color == null)
             {
                 return NotFound();
